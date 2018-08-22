@@ -38,9 +38,19 @@ class TestSftp(unittest.TestCase):
                 all([root in file for file in files]), 'Не все пути файлов полные: {0}'.format(files)
             )
             
-    
+    def test_search_find_all_logs(self):
+        ''' найти все файлы логов по маске *.log '''
+        logs = sftp.search(REMOTE_TESTDATA_DIR, '*.log')
+        self.assertEqual(len(logs), 12, 'не все логи найдены {0}'.format(logs))
+
+    def test_search_find_all_logs_in_logs_folders_with_3_in_name(self):
+        ''' найти все логи в папках logs_n, которые содержат в имени цифру 3 '''
+        logs = sftp.search(REMOTE_TESTDATA_DIR, '*/logs_*/*3*')
+        self.assertEqual(len(logs), 3, 'не все логи в папках logs_n найдены {0}'.format(logs))
 
 if __name__ == '__main__':
-    TestSftp().test_walk_found_all_dirs_and_files()
-    TestSftp().test_walk_return_full_pathes()
+    # TestSftp().test_walk_found_all_dirs_and_files()
+    # TestSftp().test_walk_return_full_pathes()
+    TestSftp().test_search_find_all_logs()
+    TestSftp().test_search_find_all_logs_in_logs_folders_with_3_in_name()
     # unittest.main()
