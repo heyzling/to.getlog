@@ -49,8 +49,8 @@ class TestSftp(unittest.TestCase):
         self.assertEqual(len(logs), 3, 'не все логи в папках logs_n найдены {0}'.format(logs))
 
 if __name__ == '__main__':
-    # TestSftp().test_walk_found_all_dirs_and_files()
-    # TestSftp().test_walk_return_full_pathes()
+    TestSftp().test_walk_found_all_dirs_and_files()
+    TestSftp().test_walk_return_full_pathes()
     TestSftp().test_search_find_all_logs()
     TestSftp().test_search_find_all_logs_in_logs_folders_with_3_in_name()
     # unittest.main()
