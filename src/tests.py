@@ -24,8 +24,8 @@ class TestSuite(unittest.TestCase):
         for path, folders, files in sftp.walk(REMOTE_TESTDATA_DIR):
             found_folders += folders
             found_files += files
-        self.assertEqual(len(found_files), 8, 'Не все файлы найдены')
-        self.assertEqual(len(found_folders), 0, 'Не все папки найдены')       
+        self.assertEqual(len(found_files), 12, 'Не все файлы найдены')
+        self.assertEqual(len(found_folders), 2, 'Не все папки найдены')       
 
 if __name__ == '__main__':
     # TestSuite().test_sft_search_file_only_last_file_mask()

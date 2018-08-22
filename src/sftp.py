@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import paramiko
+import os
 import fnmatch
-from stat import S_ISDIR
 import atexit
+import paramiko
+from stat import S_ISDIR
 
 class AuthData():
     ''' Содержит параметры аутентификации '''
@@ -50,13 +51,13 @@ class Sftp(paramiko.sftp_client.SFTPClient):
 
         atexit.register(self.close)
 
-    def walk(sftp, path):
+    def walk(self, path):
         ''' Упрощенный аналог os.walk. Интерфейс доступа такой же'''
 
         files=[]
         folders=[]
 
-        for f in sftp.listdir_attr(path):
+        for f in self.listdir_attr(path):
             if S_ISDIR(f.st_mode):
                 folders.append(f.filename)
             else:
@@ -64,11 +65,11 @@ class Sftp(paramiko.sftp_client.SFTPClient):
 
         yield path,folders,files
         for folder in folders:
-            new_path=os.path.join(path,folder)
-            for x in sftp_walk(new_path):
+            new_path=os.path.join(path,folder).replace('\\', '/')
+            for x in self.walk(new_path):
                 yield x
 
-    def search(sftp, base_dir, log_file_mask):
+    def search(self, base_dir, log_file_mask):
         ''' Поиск файлов по принятым в Unix системах wildcard 
         basedir - директория, в которой нужно произвести поиск файлов по маске
         log_file_mask - маска для поиска файлов в виде Unix wildcards'''
