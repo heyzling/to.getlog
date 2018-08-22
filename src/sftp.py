@@ -4,6 +4,7 @@ import os
 import fnmatch
 import atexit
 import paramiko
+import tools
 from stat import S_ISDIR
 
 class AuthData():
@@ -63,13 +64,13 @@ class Sftp(paramiko.sftp_client.SFTPClient):
 
         for f in self.listdir_attr(root):
             if S_ISDIR(f.st_mode):
-                folders.append(os.path.join(root, f.filename))
+                folders.append(tools.join_unix(root, f.filename))
             else:
-                files.append(os.path.join(root, f.filename))
+                files.append(tools.join_unix(root, f.filename))
 
         yield root,folders,files
         for folder in folders:
-            new_root=os.path.join(root,folder).replace('\\', '/')
+            new_root=tools.join_unix(root,folder).replace('\\', '/')
             for x in self.walk(new_root):
                 yield x
 
@@ -82,7 +83,7 @@ class Sftp(paramiko.sftp_client.SFTPClient):
         # file_mask = os.path.split(log_file_mask)[-1]
         # files = sftp.listdir(files_dir)
         # # replace - из-за того, что разработка ведется на windows машине, и join вставляет обратные слеши, которые Unix не любит
-        # log_files = [ os.path.join(files_dir, file).replace('\\', '/') for file in fnmatch.filter(files, file_mask)]
+        # log_files = [ tools.join_unix(files_dir, file).replace('\\', '/') for file in fnmatch.filter(files, file_mask)]
 
         found_files = []
         for root, folders, files in self.walk(base_dir):

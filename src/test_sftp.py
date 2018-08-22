@@ -29,7 +29,6 @@ class TestSftp(unittest.TestCase):
 
     def test_walk_return_full_pathes(self):
         ''' метод должен возвращать полные пути ко всем сущностям '''
-
         for root, folders, files in sftp.walk(REMOTE_TESTDATA_DIR):
             self.assertTrue(
                 all([root in folder for folder in folders ]), 'не все пути папок полные: {0}'.format(folders)
@@ -48,9 +47,22 @@ class TestSftp(unittest.TestCase):
         logs = sftp.search(REMOTE_TESTDATA_DIR, '*/logs_*/*3*')
         self.assertEqual(len(logs), 3, 'не все логи в папках logs_n найдены {0}'.format(logs))
 
+    def test_walk_return_Unix_style_pathes(self):
+        ''' Sftp.walk должен возвращать пути только с прямыми слешами. Windows-стайл недопустим '''
+        found_files = []
+        found_folders = []
+        for root, folders, files in sftp.walk(REMOTE_TESTDATA_DIR):
+            found_folders += folders
+            found_files += files
+        self.assertTrue(
+            all(['\\' not in folder for folder in found_folders]), 'В путях к папкам найдены Windows-style пути: {0}'.format(found_folders))
+        self.assertTrue(
+            all(['\\' not in file for file in found_files]), 'В путях к файлам найдены Windows-style пути: {0}'.format(found_files))
+
 if __name__ == '__main__':
     TestSftp().test_walk_found_all_dirs_and_files()
     TestSftp().test_walk_return_full_pathes()
     TestSftp().test_search_find_all_logs()
     TestSftp().test_search_find_all_logs_in_logs_folders_with_3_in_name()
+    TestSftp().test_walk_return_Unix_style_pathes()
     # unittest.main()
