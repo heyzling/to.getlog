@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import paramiko
 import fnmatch
 from stat import S_ISDIR
