@@ -84,9 +84,9 @@ class Sftp(paramiko.sftp_client.SFTPClient):
         # # replace - из-за того, что разработка ведется на windows машине, и join вставляет обратные слеши, которые Unix не любит
         # log_files = [ os.path.join(files_dir, file).replace('\\', '/') for file in fnmatch.filter(files, file_mask)]
 
-        # found_files = []
-        # for root, folders, files in self.walk(base_dir):
-        #     found_files += fnmatch.filter(files, log_file_mask)
+        found_files = []
+        for root, folders, files in self.walk(base_dir):
+            found_files += fnmatch.filter(files, log_file_mask)
 
         return found_files
 
