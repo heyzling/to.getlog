@@ -21,9 +21,21 @@ def log_text_generator(lines_amount):
                 time=datetime.now().strftime("%H:%M:%S.%f"), 
                 id=str(ids[i]).zfill(9), 
                 message=message_generator(30))))
-    log_text = '\r\n'.join(log_lines)
+    log_text = '\n'.join(log_lines)
     return log_text
 
 def message_generator(text_length):
     ''' генерирует рандомную строку указанной длины из букв и пробелов '''
     return ''.join(random.choice(string.ascii_lowercase + '     ') for _ in range(text_length))
+
+def generate_log_text_for_every_log_in_testdata():
+    ''' служебный метод (предполагаю, что запущу только пару раз) который призван наполнить логи в testdata 
+    количество строк в каждом файле парсится из названия файла '''
+    for root, folders, files in os.walk('testdata'):
+        for log in files:
+            lines_count = int(log.split('_')[-1].split('.')[0])
+            text_to_write = log_text_generator(lines_count * 1000)
+            with open(os.path.join(root, log), 'w') as f:
+                f.write(text_to_write)
+
+# generate_log_text_for_every_log_in_testdata()
