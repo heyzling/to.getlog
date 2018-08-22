@@ -17,16 +17,29 @@ sftp = connect_test_sftp()
 
 class TestSuite(unittest.TestCase):
 
-    def test_sftp_walk_found_all_dirs_and_files(self):
+    def test_walk_found_all_dirs_and_files(self):
         ''' Тест проверяет, что sftp.walk итерируется по всем папкам внутир указанной папки '''
         found_files = []
         found_folders = []
-        for path, folders, files in sftp.walk(REMOTE_TESTDATA_DIR):
+        for root, folders, files in sftp.walk(REMOTE_TESTDATA_DIR):
             found_folders += folders
             found_files += files
         self.assertEqual(len(found_files), 12, 'Не все файлы найдены')
         self.assertEqual(len(found_folders), 2, 'Не все папки найдены')       
 
+    def test_walk_return_full_pathes(self):
+        ''' метод должен возвращать полные пути ко всем сущностям '''
+
+        for root, folders, files in sftp.walk(REMOTE_TESTDATA_DIR):
+            self.assertTrue(
+                all([root in folder for folder in folders ]), 'не все пути папок полные: {0}'.format(folders)
+                )
+            self.assertTrue(
+                all([root in file for file in files]), 'Не все пути файлов полные: {0}'.format(files)
+            )
+            
+
 if __name__ == '__main__':
-    # TestSuite().test_sft_search_file_only_last_file_mask()
-    TestSuite().test_sftp_walk_found_all_dirs_and_files()
+    TestSuite().test_walk_found_all_dirs_and_files()
+    TestSuite().test_walk_return_full_pathes()
+    # unittest.main()

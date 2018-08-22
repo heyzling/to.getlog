@@ -53,22 +53,24 @@ class Sftp(paramiko.sftp_client.SFTPClient):
 
         atexit.register(self.close)
 
-    def walk(self, path):
-        ''' Упрощенный аналог os.walk '''
+    def walk(self, root):
+        ''' Упрощенный аналог os.walk. 
+        Для каждой итерации возвращает кортеж - (root, folders, files)
+        Для всех folders, files возвращает полные пути на базе root '''
 
         files=[]
         folders=[]
 
-        for f in self.listdir_attr(path):
+        for f in self.listdir_attr(root):
             if S_ISDIR(f.st_mode):
-                folders.append(f.filename)
+                folders.append(os.path.join(root, f.filename))
             else:
-                files.append(f.filename)
+                files.append(os.path.join(root, f.filename))
 
-        yield path,folders,files
+        yield root,folders,files
         for folder in folders:
-            new_path=os.path.join(path,folder).replace('\\', '/')
-            for x in self.walk(new_path):
+            new_root=os.path.join(root,folder).replace('\\', '/')
+            for x in self.walk(new_root):
                 yield x
 
     def search(self, base_dir, log_file_mask):
@@ -81,7 +83,12 @@ class Sftp(paramiko.sftp_client.SFTPClient):
         # files = sftp.listdir(files_dir)
         # # replace - из-за того, что разработка ведется на windows машине, и join вставляет обратные слеши, которые Unix не любит
         # log_files = [ os.path.join(files_dir, file).replace('\\', '/') for file in fnmatch.filter(files, file_mask)]
-        return log_files
+
+        # found_files = []
+        # for root, folders, files in self.walk(base_dir):
+        #     found_files += fnmatch.filter(files, log_file_mask)
+
+        return found_files
 
     def close(self):
         ''' Закрыть соединение '''
