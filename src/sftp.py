@@ -42,7 +42,9 @@ class Sftp(paramiko.sftp_client.SFTPClient):
         self._ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self._ssh.connect(self._server, self._port, auth.user, auth.password)
 
-        # коннект по sftp, и инициализация родительского класса
+        # коннект по sftp - инициализация родительского класса
+        # то как инициализируется SFTPClient найдено в исходниках Paramiko
+        # https://github.com/paramiko/paramiko/blob/master/paramiko/sftp_client.py#L141
         chan = self._ssh._transport.open_session()
         if chan is None:
             raise Exception('failed instantiating sftp connection to {0}'.format(server))
@@ -52,7 +54,7 @@ class Sftp(paramiko.sftp_client.SFTPClient):
         atexit.register(self.close)
 
     def walk(self, path):
-        ''' Упрощенный аналог os.walk. Интерфейс доступа такой же'''
+        ''' Упрощенный аналог os.walk '''
 
         files=[]
         folders=[]
