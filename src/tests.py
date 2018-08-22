@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
-# import parser
-from loggetter import AuthData, Sftp
-import unittest
+
 import os
+import unittest
+from sftp import Sftp, AuthData
 
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 TESTDATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, '..', 'testdata'))
 REMOTE_TESTDATA_DIR = '/var/log/techops'
 
-
 def connect_test_sftp():
     server = '192.168.1.5'
     port = 2222
-    return Sftp(server, port, AuthData(server))
+    return Sftp(server, port, AuthData.get_auth_data(server))
 
 sftp = connect_test_sftp()
 
 class TestSuite(unittest.TestCase):
 
     def test_sftp_walk_found_all_dirs_and_files(self):
+        ''' Тест проверяет, что sftp.walk итерируется по всем папкам внутир указанной папки '''
         found_files = []
         found_folders = []
         for path, folders, files in sftp.walk(REMOTE_TESTDATA_DIR):
