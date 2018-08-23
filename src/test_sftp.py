@@ -44,7 +44,7 @@ class TestSftp(unittest.TestCase):
 
     def test_search_find_all_logs_in_logs_folders_with_3_in_name(self):
         ''' найти все логи в папках logs_n, которые содержат в имени цифру 3 '''
-        logs = sftp.search(REMOTE_TESTDATA_DIR, '*/logs_*/*3*')
+        logs = sftp.search(REMOTE_TESTDATA_DIR, 'logs_*/*3*')
         self.assertEqual(len(logs), 3, 'не все логи в папках logs_n найдены {0}'.format(logs))
 
     def test_walk_return_Unix_style_pathes(self):

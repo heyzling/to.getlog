@@ -88,6 +88,7 @@ class Sftp(paramiko.sftp_client.SFTPClient):
         # log_files = [ tools.join_unix(files_dir, file).replace('\\', '/') for file in fnmatch.filter(files, file_mask)]
 
         found_files = []
+        log_file_mask = tools.join_unix(base_dir, log_file_mask)
         for root, folders, files in self.walk(base_dir):
             found_files += fnmatch.filter(files, log_file_mask)
 
