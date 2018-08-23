@@ -69,7 +69,7 @@ class FileExplorer():
             lines_amount = 1
 
         if start_pos != -1:
-            raise NotImplementedError
+            self.seek(start_pos)
 
         if lines_amount == 1:
             return self.__next__()
