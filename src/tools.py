@@ -38,4 +38,6 @@ def generate_log_text_for_every_log_in_testdata():
             with open(os.path.join(root, log), 'w') as f:
                 f.write(text_to_write)
 
-# generate_log_text_for_every_log_in_testdata()
+def trace(message):
+    ''' выводит в консоль сообщение с датой '''
+    print('{0:%Y-%m-%d.%H:%M:%S.%f} TRACE {1}'.format(datetime.now(), message))
