@@ -76,13 +76,7 @@ class FileExplorer():
         if lines_amount == 1:
             return self.__next__().rstrip().decode(self.encoding)
         else:
-            start_pos = self.cur_line_index
-            end_pos = start_pos + lines_amount
-            lines = []
-            while self.cur_line_index < end_pos:
-                lines.append(self.__next__())
-
-            lines = [ line.rstrip().decode(self.encoding) for line in lines ]
+            lines = [ self.__next__().rstrip().decode(self.encoding) for i in range(lines_amount) ]
             return lines
 
     def search_string(self, string):
