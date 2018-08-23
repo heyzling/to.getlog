@@ -78,6 +78,10 @@ class FileExplorer():
             self.seek(start_pos)
         if start_pos < 0:
             self.seek(0)
+            lines_amount += start_pos
+
+        if lines_amount <= 0:
+            lines_amount = 1
         start_pos = self.cur_line_index
 
         lines = []
