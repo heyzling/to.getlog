@@ -73,5 +73,23 @@ class TestFileExplorer(unittest.TestCase):
         self.assertTrue(is_found, 'существующий в логе текст не найден')
         self.assertEqual(self.fe.cur_line_index, 35419, 'неправильный индекс у найденной строки')
 
+    def test_read_till_end_of_file(self):
+        ''' чтение до конца файла '''
+        self.fe.seek(999)
+        last_line = self.fe.read()
+        self.assertEqual(last_line, '20:10:29.149529 293517476 bmsmbnbbmb pjxvia ghg arvirots', 'Последняя линия прочитана неправильно')
+        self.assertEqual(self.fe.cur_line_index, 1000, 'индекс последней строки (EOF) не верен')
+        self.assertEqual(self.fe.read(), '', 'При чтении в конце файла не возвращается пустой символ')
+        self.assertEqual(self.fe.EOF, True, 'Не проставлен флаг окончания файла')
+        self.assertEqual(self.fe.read(), '', 'При чтении в конце файла не возвращается пустой символ')
+        self.assertEqual(self.fe.cur_line_index, 1000, 'после чтение в конце файла индекс последней строки изменился. Этого быть не должно')
+
+    def test_read_n_lines_more_than_end_of_file(self):
+        ''' чтение строк больше чем есть в файле '''
+        self.fe.seek(998)
+        end_lines = self.fe.read(50)
+        self.assertEqual(len(end_lines), 2, 'Прочитано неверное количество строк')
+        self.assertEqual(end_lines[-1], '20:10:29.149529 293517476 bmsmbnbbmb pjxvia ghg arvirots', 'Последняя строка неверная')
+
 if __name__ == '__main__':
     unittest.main()

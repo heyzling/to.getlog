@@ -21,6 +21,7 @@ class FileExplorer():
         self._cur_offset = 0
         self._cur_line_index = 0
         self.encoding = encoding
+        self.EOF = False # end of file
 
     def __enter__(self):
         return self
@@ -48,6 +49,7 @@ class FileExplorer():
         ''' текущий оффсет с начала файла на котором стоит курсор '''
         return self._cur_offset
 
+    
 
     def seek(self, line_index):
         ''' устанавилвает курсор на начало указанную строки 
@@ -68,17 +70,26 @@ class FileExplorer():
         lines_amount - количество строк, которое нужно прочесть. Если < 0, Будет проитана одна строка
         start_pos - позиция в файле откуда начинать чтение. По умолчанию (-1) - начинает с текущей позиции
         return - если прочитана одна строка - вернет строку. Если более - вернет массив строк '''
-        if lines_amount < 0:
+        if lines_amount <= 0:
             lines_amount = 1
 
         if start_pos != -1:
             self.seek(start_pos)
+        start_pos = self.cur_line_index
 
-        if lines_amount == 1:
-            return self.__next__().rstrip().decode(self.encoding)
+        lines = []
+        for line in self:
+            lines.append(line.rstrip().decode(self.encoding))
+            if self.cur_line_index >= start_pos + lines_amount:
+                break
+
+        if not lines:
+            self.EOF = True
+            return ''
+        elif len(lines) == 1:
+            return lines[0]
         else:
-            lines = [ self.__next__().rstrip().decode(self.encoding) for i in range(lines_amount) ]
-            return lines
+             return lines
 
     def search_string(self, string):
         ''' Поиск вхождения указанной строки в файле и остановка курсора на линии с ней.
