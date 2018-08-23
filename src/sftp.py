@@ -17,7 +17,7 @@ class AuthData():
     def get_auth_data(cls, server):
         ''' Получить данные аутентификации для конкретного сервера '''
 
-        print('Request authentication for: {0}'.format(server))
+        tools.trace('Request authentication for: {0}'.format(server))
         if server == '192.168.1.5':
             user = 'havok'
             password = 'bb5506451955'
@@ -95,6 +95,6 @@ class Sftp(paramiko.sftp_client.SFTPClient):
 
     def close(self):
         ''' Закрыть соединение '''
-        print('Closing SFTP connection to {0}'.format(self._server))
+        tools.trace('Closing SFTP connection to {0}'.format(self._server))
         super().close()
         self._ssh.close()
