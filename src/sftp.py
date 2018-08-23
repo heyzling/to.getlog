@@ -2,7 +2,6 @@
 
 import os
 import fnmatch
-import atexit
 import paramiko
 import tools
 from stat import S_ISDIR
@@ -52,7 +51,10 @@ class Sftp(paramiko.sftp_client.SFTPClient):
         chan.invoke_subsystem("sftp")
         super().__init__(chan)
 
-        atexit.register(self.close)
+    def __enter__(self):
+        return self
+    def __exit__(self, type, value, traceback):
+        self.close()
 
     def walk(self, root):
         ''' Упрощенный аналог os.walk. 
