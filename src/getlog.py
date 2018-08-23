@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+from argparse import ArgumentParser
 from tools import trace
 from sftp import Sftp, AuthData
 from fileexplorer import FileExplorer
@@ -45,13 +46,23 @@ def print_200_lines_of_log(server, port, auth, logs_dir, log_file_mask, line_id)
                 
 
 if __name__ == '__main__':
-    trace('Start app')
+    argparser = ArgumentParser(description="Find line in remote log and print 100 lines up and down around it")
+    argparser.add_argument('-s', '--server', help='Server to connect', required=True)
+    argparser.add_argument('-p', '--port', help='Port for server to connect', default=22, type=int)
+    argparser.add_argument('-u', '--user', help='User for server connection')
+    argparser.add_argument('--pass', help='Password for server connection')
+    argparser.add_argument('-d', '--dir', help='Directory storing logs you wish to explore', required=True)
+    argparser.add_argument('-m', '--mask', help="Unix-style wildcards for searching logs. Example = '*.log'", required=True)
+    argparser.add_argument('-i', '--id', help='Id-string you wish to search', required=True)
 
-    server = '192.168.1.5'
-    port = 2222
-    auth = AuthData.get_auth_data(server)
-    logs_base_dir = '/var/log/techops'
-    logs_search_mask = 'logs*'
-    id_to_search = 411295424
+    args = argparser.parse_args()
 
-    print_200_lines_of_log(server, port, auth, logs_base_dir, logs_search_mask, id_to_search)
+    if not args.user:
+        args.auth = AuthData.get_auth_data(args.server)
+        args.user = args.auth.user # только для красоты вывода аргументов
+        args.password = args.auth.password
+    else:
+        args.auth = AuthData(args.user, args.password)
+
+    trace('App started with args: {0}'.format(str(args)))
+    print_200_lines_of_log(args.server, args.port, args.auth, args.dir, args.mask, args.id)
