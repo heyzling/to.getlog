@@ -17,7 +17,7 @@ class FileExplorer():
         self.file_path = file_path
         self._file = self._file_open_method(self.file_path, self._open_mode)
         self._file_enum = enumerate(self._file)
-        self._line_offsets = [ ]
+        self._line_offsets = []
         self._cur_offset = 0
         self._cur_line_index = 0
         self.encoding = encoding
@@ -31,7 +31,8 @@ class FileExplorer():
         return self
     def __next__(self):
         line_index, line = self._file_enum.__next__()
-        self._line_offsets.append(self._cur_offset)
+        if line_index >= len(self._line_offsets):
+            self._line_offsets.append(self._cur_offset)
         self._cur_offset += len(line)
         self._cur_line_index = line_index + 1
         return line
