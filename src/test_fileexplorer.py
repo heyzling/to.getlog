@@ -86,10 +86,17 @@ class TestFileExplorer(unittest.TestCase):
 
     def test_read_n_lines_more_than_end_of_file(self):
         ''' чтение строк больше чем есть в файле '''
-        self.fe.seek(998)
-        end_lines = self.fe.read(50)
-        self.assertEqual(len(end_lines), 2, 'Прочитано неверное количество строк')
+        end_lines = self.fe.read(50, 990)
+        self.assertEqual(len(end_lines), 10, 'Прочитано неверное количество строк')
         self.assertEqual(end_lines[-1], '20:10:29.149529 293517476 bmsmbnbbmb pjxvia ghg arvirots', 'Последняя строка неверная')
+
+    def test_read_till_x_return_to_y_and_then_read_till_z_more_than_x(self):
+        ''' Прочитать до Х, затем вернуться до y затем читать до Z > X'''
+        x, y, z = 5, 2, 7
+        self.fe.read(x)
+        self.fe.seek(y)
+        self.fe.read(z)
+        self.assertEqual(self.fe.cur_line_index, 9)
 
 if __name__ == '__main__':
     unittest.main()

@@ -60,7 +60,8 @@ class FileExplorer():
             exsisting_offset = self._line_offsets[line_index]
             self._cur_offset = exsisting_offset
             self._cur_line_index = line_index
-            self._file.seek(exsisting_offset, 0)
+            self._file.seek(self._cur_offset, 0)
+            self._file_enum = enumerate(self._file, self._cur_line_index)
         else:
             for i in range(len(self._line_offsets), line_index):
                 self.__next__()
