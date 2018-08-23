@@ -24,7 +24,7 @@ class TestSftp(unittest.TestCase):
         for root, folders, files in sftp.walk(REMOTE_TESTDATA_DIR):
             found_folders += folders
             found_files += files
-        self.assertEqual(len(found_files), 12, 'Не все файлы найдены')
+        self.assertEqual(len(found_files), 15, 'Не все файлы найдены')
         self.assertEqual(len(found_folders), 2, 'Не все папки найдены')       
 
     def test_walk_return_full_pathes(self):
@@ -60,9 +60,4 @@ class TestSftp(unittest.TestCase):
             all(['\\' not in file for file in found_files]), 'В путях к файлам найдены Windows-style пути: {0}'.format(found_files))
 
 if __name__ == '__main__':
-    TestSftp().test_walk_found_all_dirs_and_files()
-    TestSftp().test_walk_return_full_pathes()
-    TestSftp().test_search_find_all_logs()
-    TestSftp().test_search_find_all_logs_in_logs_folders_with_3_in_name()
-    TestSftp().test_walk_return_Unix_style_pathes()
-    # unittest.main()
+    unittest.main()
