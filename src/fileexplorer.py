@@ -4,13 +4,14 @@ class FileExplorer():
     Если строка уже была прочитана/итерирована, то переход к ней будет осуществляться быстро,
     т.к. информация об офсетах строк кешируется '''
 
-    def __init__(self, file_object_open_method, file_path, open_mode):
+    def __init__(self, file_object_open_method, file_path, open_mode, encoding = 'utf-8'):
         ''' 
         file_object_open_method - метод, который создает file-like объект
         file_path - путь к файлу
         open_mode - метод открытия (r, w, rb, a и так далее). 
                     От метода открытия зависит тип возвращаемых строк.
-                    Например, при открытии в режиме rb, будет возвращена строка в виде массива байт'''
+                    Например, при открытии в режиме rb, будет возвращена строка в виде массива байт
+        encoding - кодировка файла (по умолчанию - utf-8) '''
         self._file_open_method = file_object_open_method
         self._open_mode = open_mode
         self.file_path = file_path
@@ -19,6 +20,7 @@ class FileExplorer():
         self._line_offsets = [ ]
         self._cur_offset = 0
         self._cur_line_index = 0
+        self.encoding = encoding
 
     def __enter__(self):
         return self
@@ -82,12 +84,12 @@ class FileExplorer():
 
             return lines
 
-    def search_for(self, string):
+    def search_string(self, string):
         ''' Поиск вхождения указанной строки в файле и остановка курсора на линии с ней.
         returns boolean - найдено ли вхождение или нет  '''
         bstring = string.encode(self.encoding)
-        for l in self.read():
-            if bstring in l:
+        for line in self:
+            if bstring in line:
                 return True
         return False
     

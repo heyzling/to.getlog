@@ -6,6 +6,7 @@ from fileexplorer import FileExplorer
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 TESTDATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, '..', 'testdata'))
 DATA_01_LOG = os.path.join(TESTDATA_DIR, 'data_01.log')
+DATA_43_LOG = os.path.join(TESTDATA_DIR, 'data_43.log')
 ENCODING = 'utf-8'
 
 class TestFileExplorer(unittest.TestCase):
@@ -64,6 +65,13 @@ class TestFileExplorer(unittest.TestCase):
         self.assertEqual(lines[lines_to_read - 1].rstrip().decode(ENCODING), '20:10:29.086017 858173529 r evgcpe cepkzed daz fddjdecmu', '{0} строка не равна строке из файла'.format(start_pos + lines_to_read))
         self.assertEqual(self.fe.cur_line_index, start_pos + lines_to_read, 'после чтения курсор не на той позиции')
 
+    def test_search_string_exsistint_string_return_True(self):
+        ''' поиск существующеего текста в логе '''
+        text_to_search = '291894706'
+        self.fe = FileExplorer(open, DATA_43_LOG, 'rb')
+        is_found = self.fe.search_string(text_to_search)
+        self.assertTrue(is_found, 'существующий в логе текст не найден')
+        self.assertEqual(self.fe.cur_line_index, 35419, 'неправильный индекс у найденной строки')
 
 if __name__ == '__main__':
     unittest.main()
