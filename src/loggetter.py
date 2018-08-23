@@ -41,7 +41,7 @@ def print_200_lines_of_log(server, port, auth, logs_dir, log_file_mask, line_id)
                     break
 
                 else:
-                    trace("No '{0}' occurrencies has been found.")
+                    trace("No '{0}' occurrencies has been found.".format(line_id))
                 
 
 if __name__ == '__main__':
