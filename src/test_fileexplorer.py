@@ -47,7 +47,12 @@ class TestFileExplorer(unittest.TestCase):
     
     def test_seek_return_to_previous_line(self):
         ''' возвращение на уже прочитанную линию '''
-        raise NotImplementedError
+        read_lines = 5
+        seak_line = 2
+        self.fe.read(read_lines)
+        self.fe.seek(seak_line)
+        self.assertEqual(self.fe.cur_line_index, seak_line, 'курсор не встал на линию {0}'.format(seak_line))
+        self.assertEqual(self.fe.read().rstrip().decode(ENCODING), '20:10:29.085040 987719878  p tiwj   puca yhl kt gqqeihc', 'читается неправильная строка')
 
 if __name__ == '__main__':
     unittest.main()

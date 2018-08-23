@@ -34,12 +34,7 @@ class FileExplorer():
         self._cur_line_index = line_index + 1
         return line
 
-    def _seek_offset(self, offset):
-        ''' устанавливает курсор на указанную позицию в файле '''
-        self._cur_offset = offset
-        return self._file.seek(offset, 0)
-
-
+    
     @property
     def cur_line_index(self):
         ''' номер строки в начале которой стоит курсор (0-based) '''
@@ -52,10 +47,15 @@ class FileExplorer():
 
 
     def seek(self, line_index):
-        ''' устанавилвает курсор на начало указанную строку. 
-        Если файл уже читался и оффсет строки закеширован чтение файла заново не происходит '''
+        ''' устанавилвает курсор на начало указанную строки 
+        Если файл уже читался и оффсет строки закеширован чтение файла заново не происходит
+        line_index - 0-based индекс строки '''
         if len(self._line_offsets) > line_index:
-            self._seek_offset(self._line_offsets[line_index])
+            # если оффсет был закеширован ставим курсор на него
+            exsisting_offset = self._line_offsets[line_index]
+            self._cur_offset = exsisting_offset
+            self._cur_line_index = line_index
+            self._file.seek(exsisting_offset, 0)
         else:
             for i in range(len(self._line_offsets), line_index):
                 self.__next__()
