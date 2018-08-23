@@ -4,7 +4,7 @@ class FileExplorer():
     Если строка уже была прочитана/итерирована, то переход к ней будет осуществляться быстро,
     т.к. информация об офсетах строк кешируется '''
 
-    def __init__(self, file_object_open_method, file_path, open_mode, encoding = 'utf-8'):
+    def __init__(self, file_object_open_method, file_path, encoding = 'utf-8'):
         ''' 
         file_object_open_method - метод, который создает file-like объект
         file_path - путь к файлу
@@ -13,7 +13,7 @@ class FileExplorer():
                     Например, при открытии в режиме rb, будет возвращена строка в виде массива байт
         encoding - кодировка файла (по умолчанию - utf-8) '''
         self._file_open_method = file_object_open_method
-        self._open_mode = open_mode
+        self._open_mode = 'rb'
         self.file_path = file_path
         self._file = self._file_open_method(self.file_path, self._open_mode)
         self._file_enum = enumerate(self._file)

@@ -12,7 +12,7 @@ ENCODING = 'utf-8'
 class TestFileExplorer(unittest.TestCase):
 
     def setUp(self):
-        self.fe = FileExplorer(open, DATA_01_LOG, 'rb')
+        self.fe = FileExplorer(open, DATA_01_LOG)
 
     def tearDown(self):
         self.fe.close()
@@ -68,7 +68,7 @@ class TestFileExplorer(unittest.TestCase):
     def test_search_string_exsistint_string_return_True(self):
         ''' поиск существующеего текста в логе '''
         text_to_search = '291894706'
-        self.fe = FileExplorer(open, DATA_43_LOG, 'rb')
+        self.fe = FileExplorer(open, DATA_43_LOG)
         is_found = self.fe.search_string(text_to_search)
         self.assertTrue(is_found, 'существующий в логе текст не найден')
         self.assertEqual(self.fe.cur_line_index, 35419, 'неправильный индекс у найденной строки')
