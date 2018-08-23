@@ -27,7 +27,7 @@ class TestFileExplorer(unittest.TestCase):
     def test_read_1_line_return_one_line(self):
         ''' чтение одной строки'''
         line = self.fe.read()
-        self.assertEqual(line.rstrip().decode(ENCODING), '20:10:29.085040 185130259 dqhl gzytdvpprvflrivlle h    i')
+        self.assertEqual(line, '20:10:29.085040 185130259 dqhl gzytdvpprvflrivlle h    i')
         self.assertEqual(self.fe.cur_line_index, 1, '')
 
 
@@ -36,8 +36,8 @@ class TestFileExplorer(unittest.TestCase):
         lines_to_read = 5
         lines = self.fe.read(lines_to_read)
         self.assertEqual(len(lines), lines_to_read, )
-        self.assertEqual(lines[0].rstrip().decode(ENCODING), '20:10:29.085040 185130259 dqhl gzytdvpprvflrivlle h    i', 'Первая прочитанная строка не равна строке из файла')
-        self.assertEqual(lines[lines_to_read - 1].rstrip().decode(ENCODING), '20:10:29.085040 258262132 vzkpk ivvdtpsxlcffehbibvgmjkvq', '{0} строка не равна строке из файла'.format(lines_to_read))
+        self.assertEqual(lines[0], '20:10:29.085040 185130259 dqhl gzytdvpprvflrivlle h    i', 'Первая прочитанная строка не равна строке из файла')
+        self.assertEqual(lines[lines_to_read - 1], '20:10:29.085040 258262132 vzkpk ivvdtpsxlcffehbibvgmjkvq', '{0} строка не равна строке из файла'.format(lines_to_read))
         self.assertEqual(self.fe.cur_line_index, lines_to_read, '')
 
     def test_seek_line_return_correct_line(self):
@@ -53,7 +53,7 @@ class TestFileExplorer(unittest.TestCase):
         self.fe.read(lines_to_read)
         self.fe.seek(seak_line)
         self.assertEqual(self.fe.cur_line_index, seak_line, 'курсор не встал на линию {0}'.format(seak_line))
-        self.assertEqual(self.fe.read().rstrip().decode(ENCODING), '20:10:29.085040 987719878  p tiwj   puca yhl kt gqqeihc', 'читается неправильная строка')
+        self.assertEqual(self.fe.read(), '20:10:29.085040 987719878  p tiwj   puca yhl kt gqqeihc', 'читается неправильная строка')
 
     def test_read_n_lines_from_start_pos(self):
         ''' чтение указанного количества строк, начиная с указанной позиции '''
@@ -61,8 +61,8 @@ class TestFileExplorer(unittest.TestCase):
         lines_to_read = 5
         lines = self.fe.read(lines_to_read, start_pos)
         self.assertEqual(len(lines), lines_to_read, 'прочитаны не все строки')
-        self.assertEqual(lines[0].rstrip().decode(ENCODING), '20:10:29.086017 392548458 hcwxu rr doiu mofiansylomvsfi', 'Первая прочитанная строка не равна строке из файла')
-        self.assertEqual(lines[lines_to_read - 1].rstrip().decode(ENCODING), '20:10:29.086017 858173529 r evgcpe cepkzed daz fddjdecmu', '{0} строка не равна строке из файла'.format(start_pos + lines_to_read))
+        self.assertEqual(lines[0], '20:10:29.086017 392548458 hcwxu rr doiu mofiansylomvsfi', 'Первая прочитанная строка не равна строке из файла')
+        self.assertEqual(lines[lines_to_read - 1], '20:10:29.086017 858173529 r evgcpe cepkzed daz fddjdecmu', '{0} строка не равна строке из файла'.format(start_pos + lines_to_read))
         self.assertEqual(self.fe.cur_line_index, start_pos + lines_to_read, 'после чтения курсор не на той позиции')
 
     def test_search_string_exsistint_string_return_True(self):
