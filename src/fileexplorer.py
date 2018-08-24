@@ -66,7 +66,7 @@ class FileExplorer():
             for i in range(len(self._line_offsets), line_index):
                 self.__next__()
 
-    def read(self, lines_amount=1, start_pos=-1):
+    def read(self, lines_amount=1, start_pos=None):
         ''' построчно читает файл, начиная с указанной позиции. Возвращает прочитанные строки
         lines_amount - количество строк, которое нужно прочесть. Если < 0, Будет проитана одна строка
         start_pos - позиция в файле откуда начинать чтение. По умолчанию (-1) - начинает с текущей позиции
@@ -74,11 +74,12 @@ class FileExplorer():
         if lines_amount <= 0:
             lines_amount = 1
 
-        if start_pos >= 0:
-            self.seek(start_pos)
-        if start_pos < 0:
-            self.seek(0)
-            lines_amount += start_pos
+        if start_pos is not None:
+            if start_pos >= 0:
+                self.seek(start_pos)
+            if start_pos < 0:
+                self.seek(0)
+                lines_amount += start_pos
 
         if lines_amount <= 0:
             lines_amount = 1
