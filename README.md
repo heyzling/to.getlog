@@ -40,7 +40,7 @@
  - pip >= 9.0.3
 
 ```sh
-git clone https://mirakulus@bitbucket.org/mirakulus/techops.logparser.git
+git clone https://github.com/mirakulus/to.getlog.git
 cd techops.logparser
 pip install -r requirements.txt
 python src/getlog.py --help
